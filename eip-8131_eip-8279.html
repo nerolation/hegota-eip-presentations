@@ -40,12 +40,12 @@
 </section>
 </foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="4" lang="en-US">
 <h1 id="eip-8279-closes-gap-2-runtime-bal-floor">EIP-8279 closes Gap 2: runtime BAL floor</h1>
+<p>Triggers: cold address 20 B, cold slot 32 B, <code>SSTORE</code> value change +32 B, value-bearing <code>CALL</code> 32 B, <code>CREATE</code> deploy <code>len(code)</code>.</p>
 <pre is="marp-pre" data-auto-scaling="downscale-only"><code>extend_floor(tx_env, n_bytes):
     tx_env.floor_gas_used += n_bytes * 64
     if floor_gas_used &gt; tx.gas: raise OOG
 </code></pre>
 <p>A parallel counter, not a reservation: execution gas is untouched; the accumulator is just checked against <code>tx.gas</code>. Called before each BAL insertion.</p>
-<p>Triggers: cold address 20 B, cold slot 32 B, <code>SSTORE</code> value change +32 B, value-bearing <code>CALL</code> 32 B, <code>CREATE</code> deploy <code>len(code)</code>.</p>
 <p>Seeded with <code>tx_floor</code> from EIP-8131 plus 51 B per authorization for the auth's own BAL contribution.</p>
 </section>
 </foreignObject></svg><svg data-marpit-svg="" viewBox="0 0 1280 720"><foreignObject width="1280" height="720"><section id="5" lang="en-US">
