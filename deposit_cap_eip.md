@@ -32,13 +32,23 @@ The cap must also be cheap for builders to enforce. Charging each transaction a 
 
 ### Block validity rule
 
-After execution, let `deposit_count` be the number of deposit requests (request type `0x00`, [EIP-7685](./eip-7685.md)) derived from the block per [EIP-6110](./eip-6110.md).
-
-A block is valid only if:
+After execution, count the deposit events while deriving the block's deposit requests (request type `0x00`, [EIP-7685](./eip-7685.md)) per [EIP-6110](./eip-6110.md):
 
 ```python
-deposit_count <= MAX_DEPOSITS_PER_BLOCK
+deposit_count = 0
+for receipt in block.receipts:
+    for log in receipt.logs:
+        if (
+            log.address == DEPOSIT_CONTRACT_ADDRESS
+            and log.topics[0] == DEPOSIT_EVENT_SIGNATURE_HASH
+        ):
+            deposit_count += 1
+
+if deposit_count > MAX_DEPOSITS_PER_BLOCK:
+    raise InvalidBlock
 ```
+
+`DEPOSIT_CONTRACT_ADDRESS` and `DEPOSIT_EVENT_SIGNATURE_HASH` are as defined in [EIP-6110](./eip-6110.md).
 
 ## Rationale
 
